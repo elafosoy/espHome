@@ -1,7 +1,7 @@
 #include "secret.h"
 #include "PantallaMatrix.h"
 #include "Mqtt.h"
-#include "Temperature.h"
+#include "Temperature.h" 
    
 PantallaMatrix m_pantalla; 
 Temperature m_temperature;
@@ -35,6 +35,7 @@ void publishTemperature(){
     m_mqtt.publish(topicHumidity, humidity); 
 }
 
+
 void loop(){ 
  
   if ( millis() > 86400000){
@@ -50,10 +51,10 @@ void loop(){
     showHumidity();
   } else if (millis() % 5000 == 0){//Serial.println("Cada 5s"); 
     showTemp();         
-  } else if (millis() % 100 == 0){//Serial.println("Cada 1s");
+  } else if (millis() % 1000 == 0){//Serial.println("Cada 1s");
      m_pantalla.scrollBar();
      m_mqtt.handleMQTT();
-  }else if (millis() % 100 == 0){//Serial.println("Cada 400ms");
+  }else if (millis() % 400 == 0){//Serial.println("Cada 400ms");
     
   }
 

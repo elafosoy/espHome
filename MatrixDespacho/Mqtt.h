@@ -3,6 +3,7 @@
 #include <PubSubClient.h>
 #include <ESP8266WiFi.h>
 #include "PantallaMatrix.h"
+#include "Connection.h"
 
 class Mqtt{
 
@@ -13,33 +14,15 @@ class Mqtt{
 public:
     Mqtt(){
       m_pantalla = new PantallaMatrix();
-      WiFi.mode(WIFI_STA);
       m_client = new PubSubClient(m_espClient); 
       m_client->setServer(MQTT_SERVER, MQTT_PORT);
-      m_client->setCallback(callback); 
- 
+      m_client->setCallback(callback);  
     }
+    
     ~Mqtt(){
       delete m_pantalla;
       delete m_client;
       }
-
-    void connectWifi(){        
-      if (WiFi.status() != WL_CONNECTED){
-        WiFi.mode(WIFI_STA);
-        WiFi.begin(WIFI_NAME, WIFI_PASSWORD);
-      
-        while (WiFi.status() != WL_CONNECTED) { 
-          delay(500); 
-        }    
-        Serial.println("Wifi connected OK");
-
-          Serial.println("IP address: ");
-          Serial.println(WiFi.localIP());
-      }else{
-        Serial.println("Wifi OK");
-      }
-    }
 
     void handleMQTT(){
       m_client->loop();
@@ -48,11 +31,13 @@ public:
     void subscribe(const char* topic){
       reconnect();
       m_client->subscribe(topic);
+      //Connection::WiFiOff();
     }
 
     void publish(String topic, String msg){
       reconnect();
       m_client->publish(topic.c_str(),msg.c_str());
+      //Connection::WiFiOff();
     }
 
     void publish(String topic, float val){
@@ -74,7 +59,7 @@ public:
      }
 
   void reconnect() { 
-    connectWifi();
+    Connection::connectWifi();
     
     if (!m_client->connected()) {            
       int retrys = 0;
