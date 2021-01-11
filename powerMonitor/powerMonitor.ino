@@ -2,7 +2,9 @@
 #include "Mqtt.h" 
 #include "power.h"
 
-#define HOSTNAME "ESP-PowerMonitor"
+
+
+#define HOSTNAME "ESP-PowerMonitor-OTA"
     
 Mqtt m_mqtt;
 Power m_power;
@@ -11,8 +13,8 @@ void setup(){
   Serial.begin(115200);
   pinMode(LED_BUILTIN, OUTPUT);
   digitalWrite(LED_BUILTIN, HIGH); 
-
-  Connection::setHostName(HOSTNAME); 
+ 
+  Connection::connectWifi(HOSTNAME);
 }   
 
  
@@ -62,10 +64,12 @@ void loop(){
   } else if (millis() % 5000 == 0){//Serial.println("Cada 5s"); 
          
   } else if (millis() % 1000 == 0){//Serial.println("Cada 1s");
-    publishPower();
+    
+    publishPower();    
     m_mqtt.handleMQTT();
   }else if (millis() % 400 == 0){//Serial.println("Cada 400ms");
     
   }
 
+  ArduinoOTA.handle();
 }

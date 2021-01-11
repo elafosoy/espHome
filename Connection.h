@@ -1,6 +1,7 @@
 #ifndef CONNECTION_H
 #define CONNECTION_H
 #include "secret.h"   
+#include "ota.h"  
 
 class Connection { 
   public:
@@ -12,7 +13,9 @@ class Connection {
       wifi_station_set_hostname(hostname);
     }
 
-     static void connectWifi(){            
+     static void connectWifi(const char *hostname=""){  
+      wifi_station_set_hostname(hostname);
+                
       if (WiFi.status() != WL_CONNECTED){
         Connection::WiFiOn();        
         while (WiFi.status() != WL_CONNECTED) { 
@@ -25,6 +28,8 @@ class Connection {
       }else{
         Serial.println("Wifi OK");
       }
+
+      Ota::init(hostname);
     }
 
     
