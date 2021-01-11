@@ -1,26 +1,22 @@
 #ifndef MQTT_H
 #define MQTT_H 
 #include <PubSubClient.h>
-#include <ESP8266WiFi.h>
-#include "PantallaMatrix.h"
+#include <ESP8266WiFi.h> 
 #include "Connection.h"
 
 class Mqtt{
 
   WiFiClient m_espClient;
-  PubSubClient *m_client;
-  PantallaMatrix *m_pantalla; 
+  PubSubClient *m_client; 
 
 public:
-    Mqtt(){
-      m_pantalla = new PantallaMatrix();
+    Mqtt(){ 
       m_client = new PubSubClient(m_espClient); 
       m_client->setServer(MQTT_SERVER, MQTT_PORT);
       m_client->setCallback(callback);  
     }
     
-    ~Mqtt(){
-      delete m_pantalla;
+    ~Mqtt(){ 
       delete m_client;
       }
 
@@ -52,10 +48,7 @@ public:
       Serial.print("] ");
       char text[length +1 ];
       memcpy(text, payload,length);
-      Serial.println(text);
-
-      PantallaMatrix pantalla;
-      pantalla.write(text,true);       
+      Serial.println(text);     
      }
 
   void reconnect() { 
@@ -71,8 +64,6 @@ public:
         clientId += String(random(0xffff), HEX);
         // Attempt to connect
         if (m_client->connect(clientId.c_str(),MQTT_USER,MQTT_PASSWORD)) { 
-              m_pantalla->write("MQTT"); 
-              delay(800); 
               Serial.println("MQTT connection OK");
         } else { 
           // Wait 5 seconds before retrying
@@ -80,8 +71,7 @@ public:
           delay(1000);
         }
 
-        retrys++;
-        m_pantalla->scrollBar();
+        retrys++; 
       }
     } 
   }

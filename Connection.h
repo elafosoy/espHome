@@ -3,15 +3,16 @@
 #include "secret.h"   
 
 class Connection { 
-
-
   public:
     Connection(){ 
- 
+      
     } 
 
-     static void connectWifi(){ 
-           
+    static void setHostName(const char *hostname){ 
+      wifi_station_set_hostname(hostname);
+    }
+
+     static void connectWifi(){            
       if (WiFi.status() != WL_CONNECTED){
         Connection::WiFiOn();        
         while (WiFi.status() != WL_CONNECTED) { 
