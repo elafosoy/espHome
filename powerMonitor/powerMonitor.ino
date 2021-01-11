@@ -12,8 +12,7 @@ Power m_power;
 void setup(){ 
   Serial.begin(115200);
   pinMode(LED_BUILTIN, OUTPUT);
-  digitalWrite(LED_BUILTIN, HIGH); 
- 
+  digitalWrite(LED_BUILTIN, HIGH);  
   Connection::connectWifi(HOSTNAME);
 }   
 
@@ -32,19 +31,24 @@ void printMeasure( float valueA,float valueW )
 
 void publishPower(){     
     //Mido el sensor de consumo total
-    float currentRMS = m_power.getCorrienteSensor1();
-    float power = 230.0 * currentRMS; 
+    float currentRMS ;
+    float currentRMS2;
+    
+    m_power.getCorrienteSensores(&currentRMS,&currentRMS2);
+    
+    float power = 230.0 * currentRMS;   
+    float power2 = 230.0 * currentRMS2;   
+     
+    printMeasure(currentRMS,  power);
+    printMeasure(currentRMS2,  power2);
+    
     m_mqtt.publish(TOPIC_POWER_TOTAL_A, currentRMS);
     m_mqtt.publish(TOPIC_POWER_TOTAL_W, power); 
-    printMeasure(currentRMS,  power);
     
-
-    //Mido el sensor de consumo clima
-    currentRMS = m_power.getCorrienteSensor2();
-    power = 230.0 * currentRMS;
-    m_mqtt.publish(TOPIC_POWER_CLIMA_A, currentRMS);
-    m_mqtt.publish(TOPIC_POWER_CLIMA_W, power);
-    printMeasure(currentRMS,  power);
+    
+    m_mqtt.publish(TOPIC_POWER_CLIMA_A, currentRMS2);
+    m_mqtt.publish(TOPIC_POWER_CLIMA_W, power2);
+    
 }
 
 
@@ -65,11 +69,13 @@ void loop(){
          
   } else if (millis() % 1000 == 0){//Serial.println("Cada 1s");
     
-    publishPower();    
-    m_mqtt.handleMQTT();
+
   }else if (millis() % 400 == 0){//Serial.println("Cada 400ms");
     
   }
-
+  
   ArduinoOTA.handle();
+  publishPower();    
+  m_mqtt.handleMQTT();
+  
 }

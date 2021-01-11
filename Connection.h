@@ -23,13 +23,12 @@ class Connection {
         }    
         Serial.println("Wifi connected OK");
 
-          Serial.println("IP address: ");
-          Serial.println(WiFi.localIP());
+        Serial.println("IP address: ");
+        Serial.println(WiFi.localIP());
+        Ota::init(hostname);
       }else{
         Serial.println("Wifi OK");
-      }
-
-      Ota::init(hostname);
+      }      
     }
 
     
