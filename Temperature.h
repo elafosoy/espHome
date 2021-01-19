@@ -19,6 +19,12 @@ public:
     dht.setup(D4, DHTesp::DHT11);
   }
 
+  Temperature(int pin){
+    m_humidity = 0.0;
+    m_temperature = 0.0;
+    dht.setup(pin, DHTesp::DHT11);
+  }
+
   ~Temperature(){
   } 
 
@@ -53,9 +59,23 @@ private:
     m_status = dht.getStatusString();
 
     if (m_status == "OK"){
-       m_humidity = dht.getHumidity();
-       m_temperature = dht.getTemperature();
+      float mediaHum;
+      float mediaTemp;
+      int numMuestras = 100;
+      
+      for(int i=0;i<numMuestras;i++){ 
+        mediaHum += dht.getHumidity();
+        mediaTemp += dht.getTemperature(); 
+        ArduinoOTA.handle();
+      }
+
+      m_humidity = mediaHum/numMuestras;
+      m_temperature = mediaTemp/numMuestras;
     }  
+
+
+
+    ArduinoOTA.handle();
   }
 
 };

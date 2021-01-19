@@ -48,7 +48,9 @@ public:
       Serial.print("] ");
       char text[length +1 ];
       memcpy(text, payload,length);
-      Serial.println(text);     
+      Serial.println(text);  
+
+         
      }
 
   void reconnect() { 
@@ -62,6 +64,9 @@ public:
         // Create a random client ID
         String clientId = "Wemos D1-";
         clientId += String(random(0xffff), HEX);
+        ArduinoOTA.handle();
+        handleMQTT();
+        
         // Attempt to connect
         if (m_client->connect(clientId.c_str(),MQTT_USER,MQTT_PASSWORD)) { 
               Serial.println("MQTT connection OK");

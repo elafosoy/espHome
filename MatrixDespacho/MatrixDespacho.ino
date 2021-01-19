@@ -2,6 +2,8 @@
 #include "PantallaMatrix.h"
 #include "Mqtt.h"
 #include "Temperature.h" 
+
+#define HOSTNAME "ESP-PantallaMatrix-OTA"
    
 PantallaMatrix m_pantalla; 
 Temperature m_temperature;
@@ -11,6 +13,7 @@ void setup(){
   Serial.begin(115200);
   pinMode(LED_BUILTIN, OUTPUT);
   digitalWrite(LED_BUILTIN, HIGH);   
+  Connection::connectWifi(HOSTNAME);
 }
 
 void showTemp(){  
@@ -51,10 +54,12 @@ void loop(){
   } else if (millis() % 5000 == 0){//Serial.println("Cada 5s"); 
     showTemp();         
   } else if (millis() % 1000 == 0){//Serial.println("Cada 1s");
-     m_pantalla.scrollBar();
-     
+     m_pantalla.scrollBar();     
   }else if (millis() % 400 == 0){//Serial.println("Cada 400ms");
     
   }
+
+  
   m_mqtt.handleMQTT();
+  ArduinoOTA.handle();
 }

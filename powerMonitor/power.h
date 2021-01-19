@@ -52,50 +52,6 @@ public:
    *sens2 = sqrt(sum1 / NUM_MUESTRAS);
    
   }
-
-  float getCorrienteSensor1()
-  {
-   float voltage; 
-   float corriente;
-   float sum = 0;
-   int counter = 0;
-   
-   while (counter < NUM_MUESTRAS)
-   {
-     voltage = ads.readADC_Differential_0_1() * MULTIPLIER;   
-   
-     corriente = voltage * FACTOR;
-     corriente /= 1000.0;
-   
-     sum += sq(corriente);
-     counter = counter + 1;
-    }
-   
-   corriente = sqrt(sum / NUM_MUESTRAS);
-   return(corriente);
-  }
-
-  float getCorrienteSensor2()
-  {
-   float voltage; 
-   float corriente;
-   float sum = 0;
-   int counter = 0;
-   
-   while (counter < NUM_MUESTRAS)
-   {
-     voltage = ads.readADC_Differential_2_3() * MULTIPLIER;   
-   
-     corriente = voltage * FACTOR;
-     corriente /= 1000.0;
-   
-     sum += sq(corriente);
-     counter = counter + 1;
-    }
-   
-   corriente = sqrt(sum / NUM_MUESTRAS);
-   return(corriente);
-  }
 };
 
 #endif

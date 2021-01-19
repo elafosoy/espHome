@@ -1,6 +1,7 @@
 #include "secret.h" 
 #include "Mqtt.h" 
 #include "power.h"
+#include "Temperature.h"
 
 
 
@@ -8,6 +9,7 @@
     
 Mqtt m_mqtt;
 Power m_power;
+Temperature m_temperature(14);
 
 void setup(){ 
   Serial.begin(115200);
@@ -51,28 +53,22 @@ void publishPower(){
     
 }
 
+void publishTemperature(){
+    float humidity = m_temperature.humidity();
+    float temperature = m_temperature.temperature(); 
+    
+    m_mqtt.publish(TOPIC_TEMP_ENTRADA, temperature);
+    m_mqtt.publish(TOPIC_HUMIDITY_ENTRADA, humidity); 
+}
+
 
 void loop(){ 
  
   if ( millis() > 86400000){
       ESP.restart();
-  }else if (millis() % 1800000 == 0){
-  }else if (millis() % 900000 == 0){//Serial.println("Cada 15m"); 
- 
-  }else if (millis() % 300000 == 0){//Serial.println("Cada 5m");
-    
-  } else if (millis() % 60000 == 0){//Serial.println("Cada 1m");
- 
-  } else if (millis() % 10000 == 0){//Serial.println("Cada 10s");
- 
-  } else if (millis() % 5000 == 0){//Serial.println("Cada 5s"); 
-         
-  } else if (millis() % 1000 == 0){//Serial.println("Cada 1s");
-    
-
-  }else if (millis() % 400 == 0){//Serial.println("Cada 400ms");
-    
   }
+  
+  publishTemperature();
   
   ArduinoOTA.handle();
   publishPower();    
