@@ -3,7 +3,7 @@
 #include "Mqtt.h"
 #include "Temperature.h" 
 
-#define HOSTNAME "ESP-PantallaMatrix-OTA"
+#define HOSTNAME "Despacho-OTA"
    
 PantallaMatrix m_pantalla; 
 Temperature m_temperature;
