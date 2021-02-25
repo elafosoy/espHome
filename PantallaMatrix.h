@@ -59,6 +59,9 @@ public:
     pantalla.setIntensidad(m_brillo); 
   }
 
+  void apagar(){
+    pantalla.apagar(); 
+  }
 };
 
 #endif

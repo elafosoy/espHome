@@ -12,13 +12,16 @@ class Mqtt{
 public:
     Mqtt(){ 
       m_client = new PubSubClient(m_espClient); 
-      m_client->setServer(MQTT_SERVER, MQTT_PORT);
-      m_client->setCallback(callback);  
+      m_client->setServer(MQTT_SERVER, MQTT_PORT); 
     }
     
     ~Mqtt(){ 
       delete m_client;
       }
+
+    PubSubClient* client(){
+      return m_client; 
+    }
 
     void handleMQTT(){
       m_client->loop();
